@@ -4,7 +4,7 @@
   "description": "flowchart",
   "main": "index.js",
   "scripts": {
-    "test": "npm run dev",
+    "test": "",
     "dev": "nodemon ."
   },
   "repository": {

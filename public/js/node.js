@@ -11,15 +11,18 @@ class Node {
         
         this.dragging = false;
         this.mouseover = false;
+        this.selected = false;
     }
 
     setDrawColor() {
         if (this.dragging) {
-            fill(96);
+            fill(100);
         } else if (this.mouseover) {
-            fill(128)
+            fill(120);
+        } else if(this.selected) {
+            fill(140);
         } else {
-            fill(169);
+            fill(160);
         }
     }
 
@@ -43,6 +46,7 @@ class Node {
     pressed() {
         if (this.mouseover) {
             this.dragging = true;
+            this.selected = true;
             this.offsetX = this.x - mouseX;
             this.offsetY = this.y - mouseY;
         }
@@ -52,6 +56,17 @@ class Node {
     
     released() {
         this.dragging = false;
+    }
+
+    unselect() {
+        this.selected = false;
+    }
+
+    renderSelection() {
+        fill(0, 0);
+        stroke(150);
+        strokeWeight(2);
+        rect(this.x, this.y, this.w+10, this.h+10, 10);
     }
 }
 
@@ -63,9 +78,14 @@ class EllipseNode extends Node {
 
     render() {
         this.setDrawColor();
+        noStroke();
         ellipse(this.x, this.y, this.w, this.h);
         fill(0);
         text(this.text, this.x, this.y);
+
+        if(this.selected) {
+            this.renderSelection();
+        }
     }
 
     isMouseOver() {

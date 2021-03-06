@@ -7,13 +7,9 @@
     <a href="https://github.com/let-3A-IN-DEV/flowchart/actions/workflows/node.js.yml">
         <img alt="Node.js CI" src="https://github.com/let-3A-IN-DEV/flowchart/actions/workflows/node.js.yml/badge.svg">
     </a>
-
     <br>
-    
     <img alt="License" src="https://img.shields.io/github/license/let-3A-IN-DEV/flowchart?style=flat">
-
     <br>
-
     <img alt="Open Issues" src="https://img.shields.io/github/issues-raw/let-3A-IN-DEV/flowchart?style=flat">
     <img alt="Closes Issues" src="https://img.shields.io/github/issues-closed-raw/let-3A-IN-DEV/flowchart?style=flat">
 </p>

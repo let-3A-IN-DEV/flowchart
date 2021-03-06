@@ -13,6 +13,11 @@ function setup() {
     textAlign(CENTER, CENTER);
     ellipseMode(CENTER);
     rectMode(CENTER);
+
+
+
+
+    nodes.push(new RectNode(100, 100, 200, 100));
 }
 
 function draw() {
@@ -30,9 +35,15 @@ function draw() {
         line(0, canvas.height / 2 + y, canvas.width, canvas.height / 2 + y);
     }
 
-    for(let i = nodes.length - 1; i >= 0; i--) {
+    for (let i = nodes.length - 1; i >= 0; i--) {
         if (nodes[i].checkOver() || nodes[i].dragging) {
             nodes[i].updatePos();
+
+            for (let j = 0; j < nodes.length; j++) {
+                if (j != i) {
+                    nodes[j].mouseNotOver();
+                }
+            }
             break;
         }
     }
@@ -49,13 +60,20 @@ function windowResized() {
 function mousePressed() {
     let selectedNode = false;
 
-    for(let i = nodes.length - 1; i >= 0; i--) {
+    for(let i = 0; i < nodes.length; i++) {
+        if(nodes[i].checkDelete()) {
+            nodes.splice(i, 1);
+            i--;
+        }
+    }
+
+    for (let i = nodes.length - 1; i >= 0; i--) {
         if (nodes[i].pressed()) {
             // put node to the end of the array to be rendered at last to be on top of all other
             nodes.push(nodes[i]);
             nodes.splice(i, 1);
 
-            for(let j = 0; j < nodes.length-1; j++) {
+            for (let j = 0; j < nodes.length - 1; j++) {
                 nodes[j].unselect();
             }
 
@@ -64,7 +82,7 @@ function mousePressed() {
         }
     }
 
-    if(!selectedNode) {
+    if (!selectedNode) {
         nodes.forEach(node => node.unselect());
     }
 }
@@ -77,10 +95,19 @@ function mouseReleased() {
 }
 
 function keyPressed() {
-    switch(keyCode) {
-    case ESCAPE: {
-        nodes.forEach(node => node.unselect());
-    } break;
-    
+    switch (keyCode) {
+        case ESCAPE: {
+            nodes.forEach(node => node.unselect());
+        } break;
+
+        case DELETE:
+        case BACKSPACE: {
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].selected) {
+                    nodes.splice(i, 1);
+                    i--;
+                }
+            }
+        }
     }
 }

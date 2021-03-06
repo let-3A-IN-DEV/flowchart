@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "",
+    "start": "node .",
     "dev": "nodemon ."
   },
   "repository": {

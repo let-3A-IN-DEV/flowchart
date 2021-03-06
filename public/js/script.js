@@ -13,12 +13,18 @@ function setup() {
     textAlign(CENTER, CENTER);
     ellipseMode(CENTER);
     rectMode(CENTER);
+
+
+
+
+    nodes.push(new RectNode(100, 100, 200, 100));
 }
 
 function draw() {
     background(240);
 
-    stroke('rgba(0, 0, 0, 0.2)');
+    stroke(0, 60);
+    strokeWeight(1);
 
     for (let x = 0; x < canvas.width / 2; x += 15) {
         line(canvas.width / 2 - x, 0, canvas.width / 2 - x, canvas.height);
@@ -29,12 +35,20 @@ function draw() {
         line(0, canvas.height / 2 + y, canvas.width, canvas.height / 2 + y);
     }
 
-    nodes.forEach(node => {
-        if (node.checkOver() || node.dragging) {
-            node.updatePos();
+    for (let i = nodes.length - 1; i >= 0; i--) {
+        if (nodes[i].checkOver() || nodes[i].dragging) {
+            nodes[i].updatePos();
+
+            for (let j = 0; j < nodes.length; j++) {
+                if (j != i) {
+                    nodes[j].mouseNotOver();
+                }
+            }
+            break;
         }
-        node.render();
-    });
+    }
+
+    nodes.forEach(node => node.render());
 }
 
 // change the size of the canvas regard the web page size
@@ -44,13 +58,33 @@ function windowResized() {
 
 // when the mouse is pressed the node is dragged on the canvas
 function mousePressed() {
-    nodes.forEach((node, i) => {
-        if (node.pressed()) {
-            // put node to the end of the array to be rendered at last to be on top of all other
-            nodes.push(nodes.slice(i, i + 1)[0]);
+    let selectedNode = false;
+
+    for(let i = 0; i < nodes.length; i++) {
+        if(nodes[i].checkDelete()) {
             nodes.splice(i, 1);
+            i--;
         }
-    });
+    }
+
+    for (let i = nodes.length - 1; i >= 0; i--) {
+        if (nodes[i].pressed()) {
+            // put node to the end of the array to be rendered at last to be on top of all other
+            nodes.push(nodes[i]);
+            nodes.splice(i, 1);
+
+            for (let j = 0; j < nodes.length - 1; j++) {
+                nodes[j].unselect();
+            }
+
+            selectedNode = true;
+            break;
+        }
+    }
+
+    if (!selectedNode) {
+        nodes.forEach(node => node.unselect());
+    }
 }
 
 // when the mouse is released the node is released
@@ -58,4 +92,22 @@ function mouseReleased() {
     nodes.forEach(node => {
         node.released();
     });
+}
+
+function keyPressed() {
+    switch (keyCode) {
+        case ESCAPE: {
+            nodes.forEach(node => node.unselect());
+        } break;
+
+        case DELETE:
+        case BACKSPACE: {
+            for (let i = 0; i < nodes.length; i++) {
+                if (nodes[i].selected) {
+                    nodes.splice(i, 1);
+                    i--;
+                }
+            }
+        }
+    }
 }

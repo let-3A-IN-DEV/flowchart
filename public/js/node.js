@@ -8,18 +8,21 @@ class Node {
 
         this.offsetX = 0;
         this.offsetY = 0;
-        
+
         this.dragging = false;
         this.mouseover = false;
+        this.selected = false;
     }
 
     setDrawColor() {
         if (this.dragging) {
-            fill(96);
+            fill(100);
         } else if (this.mouseover) {
-            fill(128)
+            fill(120);
+        } else if (this.selected) {
+            fill(140);
         } else {
-            fill(169);
+            fill(160);
         }
     }
 
@@ -33,6 +36,13 @@ class Node {
         return this.mouseover;
     }
 
+    checkDelete() {
+        let x = this.x + this.w / 2 + 5;
+        let y = this.y - this.h / 2 - 5;
+
+        return this.selected && dist(x, y, mouseX, mouseY) < 15 / 2;
+    }
+
     updatePos() {
         if (this.dragging) {
             this.x = mouseX + this.offsetX;
@@ -43,15 +53,36 @@ class Node {
     pressed() {
         if (this.mouseover) {
             this.dragging = true;
+            this.selected = true;
             this.offsetX = this.x - mouseX;
             this.offsetY = this.y - mouseY;
         }
 
         return this.dragging;
     }
-    
+
     released() {
         this.dragging = false;
+    }
+
+    mouseNotOver() {
+        this.mouseover = false;
+    }
+
+    unselect() {
+        this.selected = false;
+    }
+
+    renderSelection() {
+        fill(0, 0);
+        stroke(150);
+        strokeWeight(2);
+        rect(this.x, this.y, this.w + 15, this.h + 15, 10);
+
+        fill(255);
+        circle(this.x + this.w / 2 + 5, this.y - this.h / 2 - 5, 15);
+        fill(255, 0, 0);
+        text('X', this.x + this.w / 2 + 5, this.y - this.h / 2 - 5);
     }
 }
 
@@ -63,14 +94,20 @@ class EllipseNode extends Node {
 
     render() {
         this.setDrawColor();
+        stroke(80);
+        strokeWeight(2);
         ellipse(this.x, this.y, this.w, this.h);
         fill(0);
         text(this.text, this.x, this.y);
+
+        if (this.selected) {
+            this.renderSelection();
+        }
     }
 
     isMouseOver() {
         return (Math.pow((mouseX - this.x), 2) / Math.pow(this.w / 2, 2) +
-                Math.pow((mouseY - this.y), 2) / Math.pow(this.h / 2, 2)) <= 1;
+            Math.pow((mouseY - this.y), 2) / Math.pow(this.h / 2, 2)) <= 1;
     }
 }
 
@@ -84,6 +121,10 @@ class RectNode extends Node {
         rect(this.x, this.y, this.w, this.h);
         fill(0);
         text(this.text, this.x, this.y);
+
+        if (this.selected) {
+            this.renderSelection();
+        }
     }
 
     isMouseOver() {
@@ -97,12 +138,12 @@ class RectNode extends Node {
 
 class BeginNode extends EllipseNode {
     constructor() {
-        super(windowWidth/2, 100, "Begin");
+        super(windowWidth / 2, 100, "Begin");
     }
 }
 
 class EndNode extends EllipseNode {
     constructor() {
-        super(windowWidth/2, 700, "End");
+        super(windowWidth / 2, 700, "End");
     }
 }

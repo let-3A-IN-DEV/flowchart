@@ -1,20 +1,22 @@
 let nodes = [];
 let canvas;
+let multiselection;
 
 function setup() {
     canvas = createCanvas(windowWidth, windowHeight * 0.8);
     canvas.id('canvas');
 
-    // create a BeginNode and an EndNode in the canvas
+    // creates a BeginNode and an EndNode in the canvas
     nodes.push(new BeginNode());
     nodes.push(new EndNode());
 
-    // align the various text at the center of every node
+    // aligns the node's text in its centre
     textAlign(CENTER, CENTER);
     ellipseMode(CENTER);
     rectMode(CENTER);
 
-
+    // multiple selection is disabled
+    multiselection = false;
 
 
     nodes.push(new RectNode(100, 100, 200, 100));
@@ -51,7 +53,7 @@ function draw() {
     nodes.forEach(node => node.render());
 }
 
-// change the size of the canvas regard the web page size
+// changes the size of the canvas respectively to the user's webpage size
 function windowResized() {
     resizeCanvas(windowWidth, windowHeight * 0.8);
 }
@@ -73,9 +75,9 @@ function mousePressed() {
             nodes.push(nodes[i]);
             nodes.splice(i, 1);
 
-            for (let j = 0; j < nodes.length - 1; j++) {
-                nodes[j].unselect();
-            }
+            if(!multiselection)
+                for (let j = 0; j < nodes.length - 1; j++)
+                    nodes[j].unselect();
 
             selectedNode = true;
             break;
@@ -100,6 +102,10 @@ function keyPressed() {
             nodes.forEach(node => node.unselect());
         } break;
 
+        case SHIFT: {
+            multiselection = true;
+        } break;
+
         case DELETE:
         case BACKSPACE: {
             for (let i = 0; i < nodes.length; i++) {
@@ -109,5 +115,13 @@ function keyPressed() {
                 }
             }
         }
+    }
+}
+
+function keyReleased() {
+    switch(keyCode) {
+        case SHIFT: {
+            multiselection = false;
+        } break;
     }
 }

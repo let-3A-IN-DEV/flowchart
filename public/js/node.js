@@ -53,7 +53,6 @@ class Node {
     pressed() {
         if (this.mouseover) {
             this.dragging = true;
-            this.selected = true;
             this.offsetX = this.x - mouseX;
             this.offsetY = this.y - mouseY;
         }
@@ -67,6 +66,10 @@ class Node {
 
     mouseNotOver() {
         this.mouseover = false;
+    }
+
+    select() {
+        this.selected = true;
     }
 
     unselect() {
@@ -118,6 +121,8 @@ class RectNode extends Node {
 
     render() {
         this.setDrawColor();
+        stroke(80);
+        strokeWeight(2);
         rect(this.x, this.y, this.w, this.h);
         fill(0);
         text(this.text, this.x, this.y);

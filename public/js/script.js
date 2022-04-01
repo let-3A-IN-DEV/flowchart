@@ -1,10 +1,16 @@
 let nodes = [];
 let canvas;
+
 let multiselection;
+let multideselection;
 
 function setup() {
-    canvas = createCanvas(windowWidth, windowHeight * 0.8);
+    var canvasContainer = document.getElementById('canvas-container')
+    containerWidth = canvasContainer.offsetWidth;
+    containerHeight = canvasContainer.offsetHeight;
+    canvas = createCanvas(containerWidth, containerHeight);
     canvas.id('canvas');
+    canvas.parent('canvas-container');
 
     // creates a BeginNode and an EndNode in the canvas
     nodes.push(new BeginNode());
@@ -17,6 +23,7 @@ function setup() {
 
     // multiple selection is disabled
     multiselection = false;
+    multideselection = false;
 
 
     nodes.push(new RectNode(100, 100, 200, 100));
@@ -55,7 +62,7 @@ function draw() {
 
 // changes the size of the canvas respectively to the user's webpage size
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight * 0.8);
+    resizeCanvas(containerWidth, containerHeight);
 }
 
 // when the mouse is pressed the node is dragged on the canvas
@@ -74,11 +81,20 @@ function mousePressed() {
             // put node to the end of the array to be rendered at last to be on top of all other
             nodes.push(nodes[i]);
             nodes.splice(i, 1);
+            
+            if(multiselection && nodes[nodes.length - 1].selected) {
+                multideselection = true;
+                nodes[nodes.length - 1].unselect();
+            }
 
             if(!multiselection)
                 for (let j = 0; j < nodes.length - 1; j++)
                     nodes[j].unselect();
 
+           if(!nodes[nodes.length - 1].selected && !multideselection)
+                nodes[nodes.length - 1].select();
+            
+            multideselection = false;
             selectedNode = true;
             break;
         }

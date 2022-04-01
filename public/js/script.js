@@ -1,11 +1,16 @@
 let nodes = [];
 let canvas;
+
 let multiselection;
 let multideselection;
 
 function setup() {
-    canvas = createCanvas(windowWidth, windowHeight * 0.8);
+    var canvasContainer = document.getElementById('canvas-container')
+    containerWidth = canvasContainer.offsetWidth;
+    containerHeight = canvasContainer.offsetHeight;
+    canvas = createCanvas(containerWidth, containerHeight);
     canvas.id('canvas');
+    canvas.parent('canvas-container');
 
     // creates a BeginNode and an EndNode in the canvas
     nodes.push(new BeginNode());
@@ -57,7 +62,7 @@ function draw() {
 
 // changes the size of the canvas respectively to the user's webpage size
 function windowResized() {
-    resizeCanvas(windowWidth, windowHeight * 0.8);
+    resizeCanvas(containerWidth, containerHeight);
 }
 
 // when the mouse is pressed the node is dragged on the canvas

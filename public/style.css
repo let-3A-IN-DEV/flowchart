@@ -1,15 +1,8 @@
-body{
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+:root {
+    --primary-color: #351717;
+    --secondary-color: #b07373;
 }
 
-.side-column {
-    background-color: #351717;
-}
-.footer {
-    background-color: #b07373;
+body{
+    margin: 0;
 }

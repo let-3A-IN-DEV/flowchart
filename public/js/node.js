@@ -53,6 +53,7 @@ class Node {
     pressed() {
         if (this.mouseover) {
             this.dragging = true;
+            this.selected = true;
             this.offsetX = this.x - mouseX;
             this.offsetY = this.y - mouseY;
         }
@@ -66,10 +67,6 @@ class Node {
 
     mouseNotOver() {
         this.mouseover = false;
-    }
-
-    select() {
-        this.selected = true;
     }
 
     unselect() {

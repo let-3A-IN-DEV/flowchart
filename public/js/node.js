@@ -69,6 +69,10 @@ class Node {
         this.mouseover = false;
     }
 
+    select() {
+        this.selected = true;
+    }
+
     unselect() {
         this.selected = false;
     }
